@@ -1,6 +1,6 @@
 module "bucket" {
 
-  source = "../../modules/bucket"
+  source = "./modules/bucket"
 
   gcp_stg_name  = var.gcp_stg_name
   gcp_location  = var.gcp_location
