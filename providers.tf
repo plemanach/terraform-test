@@ -1,0 +1,10 @@
+
+
+provider "google" {
+
+}
+
+provider "random" {
+
+
+}
