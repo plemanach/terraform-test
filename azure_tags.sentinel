@@ -1,16 +1,26 @@
-import "tfplan/v2" as tfplan
 
-rg_tags = filter tfplan.resource_changes as _, rc {
-	rc.type is "google_storage_bucket" and
-		(rc.change.actions contains "create" or rc.change.actions is ["update"])
-}
+# This policy uses the Sentinel tfplan/v2 import to require that
+# all GCE compute instances have all mandatory labels
 
-google_tags = rule {
-	all rg_tags as _, instances {
-		instances.change.after.tags is not null
-	}
-}
+# Note that the comparison is case-sensitive but also that GCE labels are only
+# allowed to contain lowercase letters, numbers, hypens, and underscores.
 
+# Import common-functions/tfplan-functions/tfplan-functions.sentinel
+# with alias "plan"
+import "tfplan-functions" as plan
+
+# List of mandatory labels
+mandatory_labels = ["name", "ttl", "owner"]
+
+# Get all GCE compute instances
+allGCEInstances = plan.find_resources("google_storage_bucket")
+
+# Filter to GCE compute instances with violations
+# Warnings will be printed for all violations since the last parameter is true
+violatingGCEInstances = plan.filter_attribute_not_contains_list(allGCEInstances,
+                        "labels", mandatory_labels, true)
+
+# Main rule
 main = rule {
-	google_tags
+  length(violatingGCEInstances["messages"]) is 0
 }
