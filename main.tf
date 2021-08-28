@@ -7,9 +7,6 @@ module "bucket" {
   force_destroy = var.force_destroy
   storage_class = var.storage_class
   project       = var.project
-  labels = {
-    test = "test"
-
-  }
+  labels        = var.labels
 
 }

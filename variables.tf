@@ -19,6 +19,13 @@ variable "storage_class" {
   description = "Provide Storage Class and Supported values include: MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, ARCHIVE"
 }
 
+
+variable "labels" {
+  type        = map(any)
+  description = "provide name of the labels"
+}
+
+
 variable "project" {
   type        = string
   description = "provide project ID"
