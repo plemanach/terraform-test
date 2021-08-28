@@ -1,4 +1,14 @@
 
+terraform {
+   backend "remote" {
+    hostname = "app.terraform.io"
+    organization = "example-org-733f61"
+
+    workspaces {
+      name = "getting-started"
+    }
+  }
+}
 
 provider "google" {
 
